@@ -1,0 +1,7 @@
+{"sample_size": 3}
+{"iterations": 3}
+{"mutation_chance": 0.2}
+{"nr_elites": 1}
+{"nr_culled":2}
+{"nr_subpop": 1}
+{"subpop_iter_frac": 0.9}

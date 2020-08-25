@@ -1,0 +1,10 @@
+{"output_dir": "$HOME/foobar"}
+{"optimization_algo": "pso"}
+{"ml_method": "xgb"}
+{"process": "atlas"}
+{"fitness_fn": "d_roc"}
+{"use_kfold": 1}
+{"num_classes": 2}
+{"nthread": 8}
+{"trainvar_opt": 0}
+{"kappa": 1.5}
