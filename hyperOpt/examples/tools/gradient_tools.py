@@ -69,7 +69,7 @@ def gradient_wiggle(
         temp_values[curr_coordinate] += step
     else:
         temp_values[curr_coordinate] -= step
-    wiggle = evaluate(
+    wiggle = (-1)*evaluate(
         temp_values, true_values['a'], true_values['b'])
     return wiggle
 
@@ -210,7 +210,7 @@ def update_coordinates(point, true_values, step, evaluate):
         new_point = move_coordinates(point, steps)
         for variable in point.gradient:
             expected_change += point.gradient[variable] * steps[variable]
-        actual_value = evaluate(
+        actual_value = (-1)*evaluate(
             new_point.coordinates, true_values['a'], true_values['b'])
         actual_change = point.value - actual_value
         if actual_change < 0.5 * expected_change:
@@ -307,7 +307,7 @@ def gradient_descent(
             print('Iteration: ' + str(iteration))
         # Calculate function value at current coordinates
         if not curr_point.value:
-            fitness = evaluate(
+            fitness = (-1)*evaluate(
                 curr_point.coordinates, true_values['a'], true_values['b'])
             curr_point.assign_value(fitness)
         # Save data
@@ -333,7 +333,7 @@ def gradient_descent(
         history.append(collect_history(iteration, curr_point, step_size))
         curr_point = new_point
         iteration += 1
-    fitness = evaluate(
+    fitness = (-1)*evaluate(
         curr_point.coordinates, true_values['a'], true_values['b'])
     result['list_of_old_bests'].append(curr_point.coordinates)
     result['list_of_best_fitnesses'].append(fitness)

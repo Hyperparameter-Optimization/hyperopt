@@ -1,4 +1,4 @@
-{"iterations": 2}
-{"sample_size": 3}
-{"compactness_threshold": 0.01}
-{"nr_informants": 3}
+{"iterations": 5000}
+{"sample_size": 20}
+{"compactness_threshold": 1e-6}
+{"nr_informants": 7}

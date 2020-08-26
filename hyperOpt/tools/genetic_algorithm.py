@@ -99,7 +99,7 @@ class Subpopulation:
                 gene.key: gene.value for gene in chromosome.genes
             }
             chromosome_dicts.append(chromosome_dict)
-        fitnesses = self.fitness_function(chromosome_dicts)
+        fitnesses = self.fitness_function(chromosome_dicts, self.settings)
         for fitness, chromosome in zip(fitnesses, self.members):
             chromosome.set_fitness(fitness)
 
@@ -232,7 +232,7 @@ class Population:
                 gene.key: gene.value for gene in chromosome.genes
             }
             chromosome_dicts.append(chromosome_dict)
-        fitnesses = self.fitness_function(chromosome_dicts)
+        fitnesses = self.fitness_function(chromosome_dicts, self.settings)
         for fitness, chromosome in zip(fitnesses, self.population):
             chromosome.set_fitness(fitness)
 

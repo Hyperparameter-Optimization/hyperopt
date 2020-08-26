@@ -133,7 +133,7 @@ def run_random(
             best_parameters = parameter_dicts[index]
         distance = check_distance(true_values, best_parameters)
         i += 1
-    return best_parameters, best_fitness
+    return best_parameters, (-1)*best_fitness
 
 
 def prepare_run_params(value_dicts, sample_size):

@@ -12,7 +12,7 @@ from hyperOpt.examples.tools import submission_higgs as sh
 from hyperOpt.examples.tools import universal_tools as ut
 from hyperOpt.examples.tools import slurm_tools as st
 from hyperOpt.examples.tools import atlas_tools as at
-from hyperOpt.examples.tools import xgb_tools as xt
+from hyperOpt.examples.tools import atlas_tools as at
 from hyperOpt.tools import particle_swarm as pm
 from hyperOpt import examples as ex
 from pathlib import Path
@@ -59,19 +59,20 @@ def optimize(
         aux_settings_dir,
         train_file='training.csv'
 ):
-    path_to_file = os.path.join(data_path, train_file)
     print("::::::: Reading parameters :::::::")
     param_file = os.path.join(
         aux_settings_dir,
         'xgb_parameters.json'
     )
+    training_file = os.path.join(data_path, train_file)
     value_dicts = ut.read_parameters(param_file)
     pso_settings = ut.read_settings(settings_dir, 'pso')
     pso_settings.update(global_settings)
+    pso_settings['train_file'] = training_file
     if use_slurm:
         evaluation = st.get_fitness_score
     else:
-        evaluation = xt.ensemble_fitness
+        evaluation = at.ensemble_fitness
     swarm = pm.ParticleSwarm(pso_settings, evaluation, value_dicts)
     optimal_hyperparameters = swarm.particleSwarmOptimization()[0]
     return optimal_hyperparameters

@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 plt.switch_backend('Agg')
 import docopt
 import json
-import matplotlib.ticker as ticker
 import numpy as np
 import os
 
@@ -61,19 +60,6 @@ def plot_fitness_values(best_fitnesses_list, rnd, label, bins, hatch=None):
         plt.xlabel(r"$\hat{\hat{s}}$", fontdict=font)
         plt.ylabel("Runs per bin", fontdict=font)
     return bins
-
-
-def plot_fitnesses_history(result_dict, rnd, label):
-    old_fitnesses = result_dict['list_of_best_fitnesses']
-    x_values = np.arange(len(old_fitnesses))
-    plt.plot(
-        x_values,
-        old_fitnesses,
-        label=label
-    )
-    if rnd:
-        plt.xlabel('Iteration number / #')
-        plt.ylabel('Fitness')
 
 
 def plot_distances(result_dict, rnd, label):

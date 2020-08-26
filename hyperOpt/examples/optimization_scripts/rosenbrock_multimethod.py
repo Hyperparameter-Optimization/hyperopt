@@ -117,8 +117,8 @@ def run_single_choice(
             value_dicts, rt.ensemble_rosenbrock, all_settings['ga'])
         best_parameters, best_fitness = population.survivalOfTheFittest()
         result_dict['ga'] ={
-            'best_parameters': (-1)*best_parameters,
-            'best_fitness': best_fitness
+            'best_parameters': best_parameters,
+            'best_fitness': (-1)*best_fitness
         }
     if method == 'pso' or method == 'all':
         print("Particle swarm optimization")

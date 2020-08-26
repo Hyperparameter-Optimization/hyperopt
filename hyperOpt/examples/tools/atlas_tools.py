@@ -310,3 +310,12 @@ def higgs_evaluation_main(path_to_train, hyperparameters):
     train_df, trainvars = load_df(path_to_train)
     ams_scores, test_amss, train_amss = kfold(train_df, trainvars, hyperparameters)
     return ams_scores, test_amss, train_amss
+
+
+def ensemble_fitness(hyperparameter_sets, settings):
+    scores = []
+    for hyperparameters in hyperparameter_sets:
+        score = higgs_evaluation_main(
+            settings['train_file'], hyperparameters)[0]
+        scores.append(score)
+    return scores

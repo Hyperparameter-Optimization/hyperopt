@@ -9,11 +9,15 @@ Options:
 
 '''
 from hyperOpt.examples.tools import submission_higgs as sh
+from hyperOpt.examples.tools import universal_tools as ut
 from hyperOpt.examples.tools import slurm_tools as st
-from hyperOpt.examples.tools import xgb_tools as xt
+from hyperOpt.examples.tools import atlas_tools as at
 from hyperOpt.tools import genetic_algorithm as ga
-from hyperOpt.tools import universal_tools as ut
+from hyperOpt import examples as ex
+from pathlib import Path
+import hyperOpt as ho
 import numpy as np
+import shutil
 import docopt
 import json
 import os
@@ -37,11 +41,11 @@ def main(data_path, use_slurm):
         shutil.rmtree(output_dir)
     ut.save_run_settings(output_dir, settings_dir, aux_settings_dir)
     result_dict = optimize(
-        data_path,
         use_slurm,
         global_settings,
         settings_dir,
-        aux_settings_dir
+        aux_settings_dir,
+        data_path
     )
     save_results(result_dict, data_path, output_dir)
 
@@ -50,7 +54,8 @@ def optimize(
         use_slurm,
         global_settings,
         settings_dir,
-        aux_settings_dir
+        aux_settings_dir,
+        data_path,
         train_file='training.csv'
 ):
     print("::::::: Reading parameters :::::::")
@@ -59,13 +64,15 @@ def optimize(
         'xgb_parameters.json'
     )
     parameter_infos = ut.read_parameters(param_file)
+    training_file = os.path.join(data_path, train_file)
     ga_settings = ut.read_settings(settings_dir, 'ga')
     ga_settings.update(global_settings)
+    ga_settings['train_file'] = training_file
     if use_slurm:
         evaluation = st.get_fitness_score
     else:
-        evaluation = xt.ensemble_fitness
-    population = Population(parameter_infos, evaluation, ga_settings)
+        evaluation = at.ensemble_fitness
+    swarm = ga.Population(parameter_infos, evaluation, ga_settings)
     optimal_hyperparameters, best_fitness = swarm.survivalOfTheFittest()
     return optimal_hyperparameters
 
@@ -96,4 +103,3 @@ if __name__ == '__main__':
         main(data_path, use_slurm)
     except docopt.DocoptExit as e:
         print(e)
-    result_dict, output_dir = main()
