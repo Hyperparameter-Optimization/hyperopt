@@ -5,7 +5,11 @@ class Gene:
     def __init__(self, parameter_info, iterations):
         self.parameter_info = parameter_info
         self.iterations = iterations
-        self.sigma_initial = (parameter_info['max'] - parameter_info['min']) / 4
+        if bool(self.parameter_info['exp']):
+            self.sigma_initial = (
+                np.exp(parameter_info['max']) - np.exp(parameter_info['min'])) / 4
+        else:
+            self.sigma_initial = (parameter_info['max'] - parameter_info['min']) / 4
         self.sigma_step = float(self.sigma_initial) / self.iterations
 
     def create_gene(self, key, value, parameter_info):
@@ -13,20 +17,34 @@ class Gene:
         self.key = key
 
     def initialize_gene(self):
-        self.value = np.random.uniform(
-            self.parameter_info['min'],
-            self.parameter_info['max']
-        )
+        if bool(self.parameter_info['int']):
+            self.value = np.random.randint(
+                low=self.parameter_info['min'],
+                high=self.parameter_info['max']
+            )
+        else:
+            self.value = np.random.uniform(
+                self.parameter_info['min'],
+                self.parameter_info['max']
+            )
+        if bool(self.parameter_info['exp']):
+            self.value = np.exp(self.value)
         self.key = self.parameter_info['parameter']
 
     def mutate(self):
         self.sigma = self.sigma_initial - (self.sigma_step * self.iteration)
         if np.random.uniform() > 0.5:
             self.value += np.random.normal(scale=self.sigma)
-        if self.value > self.parameter_info['max']:
-            self.value = self.parameter_info['max']
-        elif self.value < self.parameter_info['min']:
-            self.value = self.parameter_info['min']
+        if bool(self.parameter_info['exp']):
+            if self.value > np.exp(self.parameter_info['max']):
+                self.value = np.exp(self.parameter_info['max'])
+            elif self.value < np.exp(self.parameter_info['min']):
+                self.value = np.exp(self.parameter_info['min'])
+        else:
+            if self.value > self.parameter_info['max']:
+                self.value = self.parameter_info['max']
+            elif self.value < self.parameter_info['min']:
+                self.value = self.parameter_info['min']
 
     def set_iteration(self, iteration):
         self.iteration = iteration
