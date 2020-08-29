@@ -35,6 +35,8 @@ class Gene:
         self.sigma = self.sigma_initial - (self.sigma_step * self.iteration)
         if np.random.uniform() > 0.5:
             self.value += np.random.normal(scale=self.sigma)
+        if bool(self.parameter_info['int']):
+            self.value = int(np.ceil(self.value))
         if bool(self.parameter_info['exp']):
             if self.value > np.exp(self.parameter_info['max']):
                 self.value = np.exp(self.parameter_info['max'])
@@ -94,13 +96,12 @@ class Chromosome:
 
 
 class Subpopulation:
-    def __init__(self, parameter_infos, fitness_function, settings):
+    def __init__(self, parameter_infos, settings):
         self.iteration = 0
         self.parameter_infos = parameter_infos
         self.settings = settings
         self.iterations = self.settings['iterations']
         self.members = self.initialize_members(self.settings['sample_size'])
-        self.fitness_function = fitness_function
 
     def initialize_members(self, sample_size):
         population = []
@@ -109,17 +110,6 @@ class Subpopulation:
             chromosome.initialize_chromosome()
             population.append(chromosome)
         return population
-
-    def evaluate_chromosomes(self): 
-        chromosome_dicts = []
-        for chromosome in self.members:
-            chromosome_dict = {
-                gene.key: gene.value for gene in chromosome.genes
-            }
-            chromosome_dicts.append(chromosome_dict)
-        fitnesses = self.fitness_function(chromosome_dicts, self.settings)
-        for fitness, chromosome in zip(fitnesses, self.members):
-            chromosome.set_fitness(fitness)
 
     def crossover(self):
         keys = self.members[0].parameters.keys()
@@ -184,20 +174,16 @@ class Subpopulation:
         for chromosome in self.members:
             chromosome.mutation(self.iteration)
 
-    def survivalOfTheFittest(self):
-        self.evaluate_chromosomes()
-        for i in range(self.settings['iterations']):
-            self.iteration = i
-            self.elitism()
-            self.culling()
-            self.selection()
-            self.crossover()
-            self.mutate()
-            new_members = self.initialize_members(self.settings['nr_culled'])
-            self.members.extend(self.elites)
-            self.members.extend(new_members)
-            self.evaluate_chromosomes()
-        return self.members
+    def survivalOfTheFittest(self, iteration):
+        self.iteration = iteration
+        self.elitism()
+        self.culling()
+        self.selection()
+        self.crossover()
+        self.mutate()
+        new_members = self.initialize_members(self.settings['nr_culled'])
+        self.members.extend(self.elites)
+        self.members.extend(new_members)
 
 
 class Population:
@@ -221,11 +207,11 @@ class Population:
         self.subpopulations = []
         subpop_size = int(
             self.settings['sample_size'] / self.settings['nr_subpop'])
-        subpop_iterations = int(
+        self.subpop_iterations = int(
             self.settings['iterations'] * self.settings['subpop_iter_frac']
         )
         subpop_settings = self.settings.copy()
-        subpop_settings['iterations'] = subpop_iterations
+        subpop_settings['iterations'] = self.subpop_iterations
         subpop_settings['sample_size'] = subpop_size
         subpop_settings['nr_culled'] = int(
             self.settings['nr_culled'] / self.settings['nr_subpop'])
@@ -233,15 +219,18 @@ class Population:
             self.settings['nr_elites'] / self.settings['nr_subpop'])
         for i in range(self.settings['nr_subpop']):
             subpopulation = Subpopulation(
-                self.parameter_infos, self.fitness_function, subpop_settings
+                self.parameter_infos, subpop_settings
             )
             self.subpopulations.append(subpopulation)
 
     def evolve_subpopulations(self):
         self.population = []
+        for i in range(self.subpop_iterations):
+            for subpopulation in self.subpopulations:
+                subpopulation.survivalOfTheFittest(i)
+            self.evaluate_subpopulations()
         for subpopulation in self.subpopulations:
-            evolvedSubpop = subpopulation.survivalOfTheFittest()
-            self.population.extend(evolvedSubpop)
+            self.population.extend(subpopulation.members)
 
     def evaluate_chromosomes(self):
         chromosome_dicts = []
@@ -317,7 +306,19 @@ class Population:
         for chromosome in self.population:
             chromosome.mutation(self.iteration)
 
+    def evaluate_subpopulations(self):
+        hyperparameters = []
+        for subpopulation in self.subpopulations:
+            parameters = [member.parameters for member in subpopulation.members]
+            hyperparameters.extend(parameters)
+        fitnesses = self.fitness_function(hyperparameters, self.settings)
+        for subpopulation in self.subpopulations:
+            for member in subpopulation.members:
+                member.set_fitness(fitnesses[0])
+                fitnesses.remove(fitnesses[0])
+
     def survivalOfTheFittest(self):
+        self.evaluate_subpopulations()
         self.evolve_subpopulations()
         print('SUBPOPULATIONS EVOLVED')
         self.evaluate_chromosomes()
@@ -339,3 +340,4 @@ class Population:
         print('Best fitness: ' + str(fitnesses[idx]))
         print('Best parameters: ' + str(self.population[idx].parameters))
         return self.population[idx].parameters, fitnesses[idx]
+

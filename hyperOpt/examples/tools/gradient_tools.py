@@ -302,7 +302,7 @@ def gradient_descent(
     dist = distance(true_values, coordinates)
     # Algorithm loop
     while (iteration <= settings['iterations']
-           and dist > settings['step_size']):
+           and abs(result['best_fitness']) > 10^(-3)):
         if iteration % 10000 == 0:
             print('Iteration: ' + str(iteration))
         # Calculate function value at current coordinates
