@@ -69,8 +69,10 @@ def save_run_settings(output_dir, settings_dir, aux_settings_dir):
     wild_card_path1 = os.path.join(settings_dir, '*')
     wild_card_path2 = os.path.join(aux_settings_dir, '*')
     for path in glob.glob(wild_card_path1):
+        print("Copying " + str(path))
         shutil.copy(path, settings_dir)
     for path in glob.glob(wild_card_path2):
+        print("Copying " + str(path))
         shutil.copy(path, settings_dir)
 
 
