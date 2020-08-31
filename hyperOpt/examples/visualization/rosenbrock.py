@@ -15,8 +15,8 @@ def plot_absolute_distances(absolute_distances, rnd, label, bins, hatch=None):
         'ga': 'GA',
         'pso': 'PSO',
         'gd': 'GD',
-        'random': 'RD',
-        'gs': 'GR'
+        'random': 'RNG',
+        'gs': 'GS'
     }
     bins = plt.hist(
         absolute_distances,
@@ -39,8 +39,8 @@ def plot_fitness_values(best_fitnesses_list, rnd, label, bins, hatch=None):
         'ga': 'GA',
         'pso': 'PSO',
         'gd': 'GD',
-        'random': 'RD',
-        'gs': 'GR'
+        'random': 'RNG',
+        'gs': 'GS'
     }
     bins = plt.hist(
         best_fitnesses_list,
