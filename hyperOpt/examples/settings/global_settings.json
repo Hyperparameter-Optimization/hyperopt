@@ -1,5 +1,5 @@
-{"output_dir": "$HOME/foobar"}
-{"optimization_algo": "pso"}
+{"output_dir": "$HOME/GA_HIGGS_FNL"}
+{"optimization_algo": "ga"}
 {"ml_method": "xgb"}
 {"process": "atlas"}
 {"fitness_fn": "d_roc"}

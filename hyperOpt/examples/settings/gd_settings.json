@@ -1,4 +1,4 @@
-{"iterations": 100}
+{"iterations": 1000000}
 {"h": 1e-3}
 {"gamma": 1e-8}
 {"step_size": 1e-2}

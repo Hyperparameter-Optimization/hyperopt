@@ -1,7 +1,7 @@
-{"sample_size": 3}
-{"iterations": 3}
+{"sample_size": 70}
+{"iterations": 100}
 {"mutation_chance": 0.2}
-{"nr_elites": 1}
-{"nr_culled":2}
-{"nr_subpop": 1}
+{"nr_elites": 7}
+{"nr_culled": 40}
+{"nr_subpop": 5}
 {"subpop_iter_frac": 0.9}
