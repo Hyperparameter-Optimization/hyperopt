@@ -295,6 +295,7 @@ def gradient_descent(
     history = []
     angles = []
     steps = []
+    result['best_fitness'] = 10**20
     # Choose random values
     coordinates = initialize(parameters)
     curr_point = Point(coordinates)
