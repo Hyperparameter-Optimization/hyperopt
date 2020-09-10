@@ -53,7 +53,7 @@ def higgs_random():
         path_to_train,
         path_to_test,
         best_parameters,
-        outfile
+        submission_file
     )
 
 if __name__ == '__main__':
