@@ -29,6 +29,7 @@ def higgs_random():
         os.makedirs(output_dir)
     else:
         shutil.rmtree(output_dir)
+    ut.save_run_settings(output_dir, settings_dir, aux_settings_dir)
     param_file = os.path.join(
         aux_settings_dir,
         'xgb_parameters.json'
