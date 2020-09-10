@@ -34,7 +34,7 @@ def higgs_random():
         'xgb_parameters.json'
     )
     parameter_infos = ut.read_parameters(param_file)
-    parameters = xt.prepare_run_params(value_dicts, NR_EVALUATION)
+    parameters = xt.prepare_run_params(parameter_infos, NR_EVALUATION)
     fitnesses = st.get_fitness_score(parameters, global_settings)
     index = np.argmax(fitnesses)
     best_parameters = parameters[index]
