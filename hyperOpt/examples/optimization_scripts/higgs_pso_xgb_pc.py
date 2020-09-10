@@ -12,7 +12,6 @@ from hyperOpt.examples.tools import submission_higgs as sh
 from hyperOpt.examples.tools import universal_tools as ut
 from hyperOpt.examples.tools import slurm_tools as st
 from hyperOpt.examples.tools import atlas_tools as at
-from hyperOpt.examples.tools import atlas_tools as at
 from hyperOpt.tools import particle_swarm as pm
 from hyperOpt import examples as ex
 from pathlib import Path
