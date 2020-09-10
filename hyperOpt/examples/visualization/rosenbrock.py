@@ -58,7 +58,7 @@ def plot_fitness_values(best_fitnesses_list, rnd, label, bins, hatch=None):
     if rnd:
         plt.title("Fitness values")
         plt.xlabel(r"$\hat{\hat{s}}$", fontdict=font)
-        plt.ylabel("Runs per bin", fontdict=font)
+        plt.ylabel("Number of trials per bin", fontdict=font)
     return bins
 
 

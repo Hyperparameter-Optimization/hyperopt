@@ -22,19 +22,19 @@ def initialize_values(value_dicts):
     '''
     sample = {}
     for xgb_params in value_dicts:
-        if bool(xgb_params['true_int']):
+        if bool(xgb_params['int']):
             value = np.random.randint(
-                low=xgb_params['range_start'],
-                high=xgb_params['range_end']
+                low=xgb_params['min'],
+                high=xgb_params['max']
             )
         else:
             value = np.random.uniform(
-                low=xgb_params['range_start'],
-                high=xgb_params['range_end']
+                low=xgb_params['min'],
+                high=xgb_params['max']
             )
         if bool(xgb_params['exp']):
             value = np.exp(value)
-        sample[str(xgb_params['p_name'])] = value
+        sample[str(xgb_params['parameter'])] = value
     return sample
 
 

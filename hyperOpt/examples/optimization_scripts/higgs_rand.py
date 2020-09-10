@@ -52,3 +52,6 @@ def higgs_random():
         best_parameters,
         outfile
     )
+
+if __name__ == '__main__':
+    higgs_random()
