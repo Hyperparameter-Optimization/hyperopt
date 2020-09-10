@@ -12,7 +12,7 @@ import json
 import shutil
 
 
-NR_EVALUATION = 2
+NR_EVALUATION = 1000
 DATA_PATH = '/home/laurits'
 
 def higgs_random():
@@ -25,6 +25,7 @@ def higgs_random():
     global_settings['package_dir'] = str(package_dir)
     global_settings['output_dir'] = str(os.path.expandvars(
         global_settings['output_dir']))
+    output_dir = global_settings['output_dir']
     output_dir = os.path.expandvars(global_settings['output_dir'])
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
@@ -36,14 +37,23 @@ def higgs_random():
         'xgb_parameters.json'
     )
     parameter_infos = ut.read_parameters(param_file)
-    parameters = xt.prepare_run_params(parameter_infos, NR_EVALUATION)
-    fitnesses = st.get_fitness_score(parameters, global_settings)
-    index = np.argmax(fitnesses)
-    best_parameters = parameters[index]
+    chunk_best_fitnesses = []
+    chunk_best_parameters = []
+    for i in range(7):
+        global_settings['output_dir'] = '_'.join([output_dir, str(i)])
+        parameters = xt.prepare_run_params(parameter_infos, NR_EVALUATION)
+        fitnesses = st.get_fitness_score(parameters, global_settings)
+        index = np.argmax(fitnesses)
+        best_parameters = parameters[index]
+        best_fitness = fitnesses[index]
+        chunk_best_parameters.append(best_parameters)
+        chunk_best_fitnesses.append(best_fitness)
+    b_index = np.argmax(chunk_best_fitnesses)
+    best_parameter_set = chunk_best_parameters[b_index]
     best_param_path = os.path.join(
         global_settings['output_dir'], 'best_parameters.json')
     with open(best_param_path, 'wt') as outFile:
-        json.dump(best_parameters, outFile)
+        json.dump(best_parameter_set, outFile)
     path_to_test = os.path.join(DATA_PATH, 'test.csv')
     path_to_train = os.path.join(DATA_PATH, 'training.csv')
     submission_file = os.path.join(
@@ -52,7 +62,7 @@ def higgs_random():
     sh.submission_creation(
         path_to_train,
         path_to_test,
-        best_parameters,
+        best_parameter_set,
         submission_file
     )
 
