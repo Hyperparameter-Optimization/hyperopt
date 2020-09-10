@@ -23,7 +23,8 @@ def higgs_random():
     aux_settings_dir = os.path.join(ex.__path__[0], 'settings')
     global_settings = ut.read_settings(aux_settings_dir, 'global')
     global_settings['package_dir'] = str(package_dir)
-    global_settings['output_dir'] = str(global_settings['output_dir'])
+    global_settings['output_dir'] = str(os.path.expandvars(
+        global_settings['output_dir']))
     output_dir = os.path.expandvars(global_settings['output_dir'])
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
