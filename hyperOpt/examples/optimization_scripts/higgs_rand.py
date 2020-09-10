@@ -27,7 +27,6 @@ def higgs_random():
         global_settings['output_dir']))
     output_dir = global_settings['output_dir']
     output_dir = os.path.expandvars(global_settings['output_dir'])
-    ut.save_run_settings(output_dir, settings_dir, aux_settings_dir)
     param_file = os.path.join(
         aux_settings_dir,
         'xgb_parameters.json'
@@ -41,6 +40,7 @@ def higgs_random():
             os.makedirs(global_settings['output_dir'])
         else:
             shutil.rmtree(global_settings['output_dir'])
+        ut.save_run_settings(global_settings['output_dir'], settings_dir, aux_settings_dir)
         parameters = xt.prepare_run_params(parameter_infos, NR_EVALUATION)
         fitnesses = st.get_fitness_score(parameters, global_settings)
         index = np.argmax(fitnesses)
