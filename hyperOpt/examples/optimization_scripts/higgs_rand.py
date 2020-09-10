@@ -27,10 +27,6 @@ def higgs_random():
         global_settings['output_dir']))
     output_dir = global_settings['output_dir']
     output_dir = os.path.expandvars(global_settings['output_dir'])
-    if not os.path.isdir(output_dir):
-        os.makedirs(output_dir)
-    else:
-        shutil.rmtree(output_dir)
     ut.save_run_settings(output_dir, settings_dir, aux_settings_dir)
     param_file = os.path.join(
         aux_settings_dir,
@@ -41,6 +37,10 @@ def higgs_random():
     chunk_best_parameters = []
     for i in range(7):
         global_settings['output_dir'] = '_'.join([output_dir, str(i)])
+        if not os.path.isdir(global_settings['output_dir']):
+            os.makedirs(global_settings['output_dir'])
+        else:
+            shutil.rmtree(global_settings['output_dir'])
         parameters = xt.prepare_run_params(parameter_infos, NR_EVALUATION)
         fitnesses = st.get_fitness_score(parameters, global_settings)
         index = np.argmax(fitnesses)
