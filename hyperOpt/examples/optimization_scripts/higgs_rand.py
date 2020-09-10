@@ -9,9 +9,10 @@ import hyperOpt as ho
 import numpy as np
 import os
 import json
+import shutil
 
 
-NR_EVALUATION = 7000
+NR_EVALUATION = 2
 DATA_PATH = '/home/laurits'
 
 def higgs_random():
