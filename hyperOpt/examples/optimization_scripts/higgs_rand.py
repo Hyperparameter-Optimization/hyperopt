@@ -26,6 +26,10 @@ def higgs_random():
     global_settings['output_dir'] = str(os.path.expandvars(
         global_settings['output_dir']))
     output_dir = global_settings['output_dir']
+    if not os.path.isdir(global_settings['output_dir']):
+        os.makedirs(global_settings['output_dir'])
+    else:
+        shutil.rmtree(global_settings['output_dir'])
     output_dir = os.path.expandvars(global_settings['output_dir'])
     param_file = os.path.join(
         aux_settings_dir,
@@ -35,7 +39,7 @@ def higgs_random():
     chunk_best_fitnesses = []
     chunk_best_parameters = []
     for i in range(7):
-        global_settings['output_dir'] = '_'.join([output_dir, str(i)])
+        global_settings['output_dir'] = os.path.join(output_dir, str(i))
         if not os.path.isdir(global_settings['output_dir']):
             os.makedirs(global_settings['output_dir'])
         else:
@@ -57,7 +61,7 @@ def higgs_random():
     path_to_test = os.path.join(DATA_PATH, 'test.csv')
     path_to_train = os.path.join(DATA_PATH, 'training.csv')
     submission_file = os.path.join(
-        global_settings['output_dir'], 'higgs_submission.rand')
+        output_dir, 'higgs_submission.rand')
     print('Creating submission file')
     sh.submission_creation(
         path_to_train,
