@@ -40,7 +40,16 @@ def main(parameter_file, output_dir):
     score = mean_d_amss - std_d_amss
     score_path = os.path.join(save_dir, 'score.json')
     with open(score_path, 'w') as score_file:
-        json.dump({'d_ams': score}, score_file)
+        json.dump(
+            {
+                'd_ams': score,
+                'test_ams': np.mean(test_amss),
+                'std_test_ams': np.std(test_amss),
+                'mean_d_ams': mean_d_amss,
+                'std_d_ams': std_d_amss
+            },
+            score_file
+        )
 
 
 if __name__ == '__main__':
